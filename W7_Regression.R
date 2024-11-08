@@ -83,7 +83,7 @@ lm(kid.score~as.factor(mom.work))
 
 # mom.hs:mom.iq代表兩者有交互作用
 fit.2=lm(kid.score~mom.hs+mom.iq+mom.hs:mom.iq)
-
+summary(fit.2)
 # 返回mom.hs, mom.iq 和mom.hs:mom.iq(交互作用)的係數
 coef(fit.2)
 # 顯示信任區間(upperbond, lowerbond)
