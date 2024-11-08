@@ -70,29 +70,50 @@ library(AER)
 fit.1 = lm(kid.score ~ mom.hs + mom.iq, data = kid_iq)
 
 # 檢驗兩者是否有線性關係
-# mom.hs = 0, mom.iq
+# H0: mom.hs = 0 and mom.iq = 0
+# H1: mom.hs != 0 or mom.iq != 0
 linearHypothesis(fit.1,c("mom.hs=0","mom.iq=0"))
 
 #
+# 將mom.work視為一個數值，只會有一個係數(連續)
 lm(kid.score~mom.work)
+
+# 將mom.work視為多個虛擬變數，會有多個係數(分類)
 lm(kid.score~as.factor(mom.work))
-#
+
+# mom.hs:mom.iq代表兩者有交互作用
 fit.2=lm(kid.score~mom.hs+mom.iq+mom.hs:mom.iq)
+
+# 返回mom.hs, mom.iq 和mom.hs:mom.iq(交互作用)的係數
 coef(fit.2)
+# 顯示信任區間(upperbond, lowerbond)
 confint(fit.2)
+
 #
 plot(mom.iq,kid.score,pch=20)
+
+# 將曲線加入圖表
+# cbind設定係數(截距, mom.hs係數為1, mom.iq係數為x, 交互項)
+# add=T -> 加入目前圖表
+# col -> 顏色
 curve(cbind(1,1,x,1*x)%*%coef(fit.2),add=T,col="red")
 curve(cbind(1,0,x,0*x)%*%coef(fit.2),add=T,col="green")
+
 #
 fit.all=lm(kid.score~mom.hs+mom.iq+mom.hs:mom.iq+mom.age+
              as.factor(mom.work),data=kid_iq)
+
+# 顯示fit.all的摘要
 summary(fit.all)
 
 
 
-detach(kid.iq)
+detach(kid_iq)
 
+
+
+
+# --------- 以下非作業 ---------------
 ##training and validation set: Toyota example
 car.df = read.csv("ToyotaCorolla.csv")
 str(car.df)
